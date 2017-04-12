@@ -13,15 +13,7 @@ make_allnodes_alledges<-
         #' 
         #' @author 
         #' Ivan Grishagin
-       
-        #ensure that all vocabulary nodes (evidence and such) have unique ids
-        #to avoid edge mishmash when multiple nodes connect to the same vocabulary node
-        old_to<-
-            edges_list$all2vocab_df$to
-        new_to<-
-            paste0(edges_list$all2vocab_df$from
-                   ,edges_list$all2vocab_df$to)
-      
+
         #combine all nodes list items
         allnodes<-
             nodes_list %>% 
@@ -31,12 +23,6 @@ make_allnodes_alledges<-
             #exclude unwanted ids
             filter(!id %in% exclude_ids) %>% 
             as.data.table
-        
-        #replace vocabulary ids
-        allnodes$id<-
-            allnodes$id %>% 
-            mapvalues(from=old_to
-                      ,to=new_to)
         
         #combine all edges list items
         #also take only those edges, that are in the nodes df
@@ -51,15 +37,28 @@ make_allnodes_alledges<-
                   to %in% allnodes$id] %>% 
             unique
         
+        #ensure that all vocabulary nodes (evidence and such) have unique ids
+        #to avoid edge mishmash when multiple nodes connect to the same vocabulary node
+        old2new_vocab<-
+            alledges[to %in% nodes_list$vocab_df$id
+                     ,.(old_to=to
+                        ,new_to=paste0(from,to))]
+        
+        #replace vocabulary ids
+        allnodes$id<-
+            allnodes$id %>% 
+            mapvalues(from=old2new_vocab$old_to
+                      ,to=old2new_vocab$new_to)
+        
         #replace vocabulary ids
         alledges$from<-
             alledges$from %>% 
-            mapvalues(from=old_to
-                      ,to=new_to)
+            mapvalues(from=old2new_vocab$old_to
+                      ,to=old2new_vocab$new_to)
         alledges$to<-
             alledges$to %>% 
-            mapvalues(from=old_to
-                      ,to=new_to)
+            mapvalues(from=old2new_vocab$old_to
+                      ,to=old2new_vocab$new_to)
         
         #make up a dictionary of replacements for nodes and edges
         #because nodes HAVE to be referred to by an INTEGER
