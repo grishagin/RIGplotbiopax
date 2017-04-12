@@ -1,6 +1,7 @@
 make_plot_graph<-
     function(allnodes
              ,alledges
+             ,pw_name="Pathway"
              ,to_html=TRUE
              ,to_svg=TRUE){  
         
@@ -31,7 +32,9 @@ make_plot_graph<-
             add_global_graph_attrs("overlap", "false", "graph") %>% 
             delete_global_graph_attrs("layout","graph") %>% 
             add_global_graph_attrs("layout","dot","graph") %>% 
-            add_global_graph_attrs("tooltip",pw_to_plot_name,"graph") 
+            add_global_graph_attrs("tooltip"
+                                   ,pw_name
+                                   ,"graph") 
       
         
         if(to_html){
