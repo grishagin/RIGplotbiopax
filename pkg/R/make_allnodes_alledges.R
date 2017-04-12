@@ -21,14 +21,7 @@ make_allnodes_alledges<-
         new_to<-
             paste0(edges_list$all2vocab_df$from
                    ,edges_list$all2vocab_df$to)
-        edges_list$all2vocab_df$to<-
-            new_to
-            
-        nodes_list$vocab_df$id<-
-            nodes_list$vocab_df$id %>% 
-            mapvalues(from=old_to
-                      ,to=new_to)
-         
+      
         #combine all nodes list items
         allnodes<-
             nodes_list %>% 
@@ -38,6 +31,12 @@ make_allnodes_alledges<-
             #exclude unwanted ids
             filter(!id %in% exclude_ids) %>% 
             as.data.table
+        
+        #replace vocabulary ids
+        allnodes$id<-
+            allnodes$id %>% 
+            mapvalues(from=old_to
+                      ,to=new_to)
         
         #combine all edges list items
         #also take only those edges, that are in the nodes df
@@ -51,6 +50,16 @@ make_allnodes_alledges<-
             .[from %in% allnodes$id & 
                   to %in% allnodes$id] %>% 
             unique
+        
+        #replace vocabulary ids
+        alledges$from<-
+            alledges$from %>% 
+            mapvalues(from=old_to
+                      ,to=new_to)
+        alledges$to<-
+            alledges$to %>% 
+            mapvalues(from=old_to
+                      ,to=new_to)
         
         #make up a dictionary of replacements for nodes and edges
         #because nodes HAVE to be referred to by an INTEGER
