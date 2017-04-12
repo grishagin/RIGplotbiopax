@@ -42,24 +42,36 @@ make_allnodes_alledges<-
         old2new_vocab<-
             alledges[to %in% nodes_list$vocab_df$id
                      ,.(old_to=to
-                        ,new_to=paste0(from,to))]
+                        ,new_to=paste0(from,to))] %>% 
+            merge_cols_shorten_df(colKey="old_to"
+                                  ,patternToMerge=";")
         
-        #replace vocabulary ids
+
+        #replace vocabulary ids and then expand those dataframes
         allnodes$id<-
             allnodes$id %>% 
             mapvalues(from=old2new_vocab$old_to
-                      ,to=old2new_vocab$new_to)
+                      ,to=old2new_vocab$new_to) 
+        allnodes<-
+            allnodes %>% 
+            split_cols_lengthen_df(colsToSplit = "id"
+                                   ,patternToSplit = ";")
         
         #replace vocabulary ids
         alledges$from<-
             alledges$from %>% 
             mapvalues(from=old2new_vocab$old_to
-                      ,to=old2new_vocab$new_to)
+                      ,to=old2new_vocab$new_to) 
+      
         alledges$to<-
             alledges$to %>% 
             mapvalues(from=old2new_vocab$old_to
                       ,to=old2new_vocab$new_to)
-        
+        alledges<-
+            alledges %>% 
+            split_cols_lengthen_df(colsToSplit = c("from","to")
+                                   ,patternToSplit = ";"
+                                   ,at_once = FALSE)
         #make up a dictionary of replacements for nodes and edges
         #because nodes HAVE to be referred to by an INTEGER
         node_char2int<-
