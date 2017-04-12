@@ -4,7 +4,8 @@
 \alias{make_plot_graph}
 \title{Make and Plot BioPAX Graph}
 \usage{
-make_plot_graph(allnodes, alledges, to_html = TRUE, to_svg = TRUE)
+make_plot_graph(allnodes, alledges, pw_id = NULL, pw_name = "Pathway",
+  to_html = TRUE, to_svg = TRUE)
 }
 \arguments{
 \item{allnodes}{Dataframe with all nodes.}
