@@ -13,7 +13,19 @@ make_allnodes_alledges<-
         #' 
         #' @author 
         #' Ivan Grishagin
-        
+       
+        #ensure that all vocabulary nodes (evidence and such) have unique ids
+        #to avoid edge mishmash when multiple nodes connect to the same vocabulary node
+        old_to<-
+            edges$all2vocab_df$to
+        edges$all2vocab_df$to<-
+            paste0(edges$all2vocab_df$from
+                   ,edges$all2vocab_df$to)
+            
+        nodes_list$vocab_df$id<-
+            mapvalues(from=old_to
+                      ,to=edges$all2vocab_df$to)
+         
         #combine all nodes list items
         allnodes<-
             nodes_list %>% 
