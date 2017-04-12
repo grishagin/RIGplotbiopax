@@ -1,6 +1,7 @@
 make_plot_graph<-
     function(allnodes
              ,alledges
+             ,pw_id=NULL
              ,pw_name="Pathway"
              ,to_html=TRUE
              ,to_svg=TRUE){  
@@ -40,10 +41,10 @@ make_plot_graph<-
         if(to_html){
             #filenames
             filename_diag_html<-
-                paste(Sys.Date()
-                      ,pw_to_plot
-                      ,"diagrammer.html"
-                      ,sep="_")
+                paste0(Sys.Date()
+                       ,"_"
+                       ,pw_id
+                       ,".html")
             #render graph
             render<-
                 render_graph(graph_diag)
@@ -53,10 +54,10 @@ make_plot_graph<-
         }
         if(to_svg){
             filename_diag_svg<-
-                paste(Sys.Date()
-                      ,pw_to_plot
-                      ,"diagrammer.svg"
-                      ,sep="_")
+                paste0(Sys.Date()
+                       ,"_"
+                       ,pw_id
+                       ,".svg")
             #export
             export_graph(graph_diag
                          ,filename_diag_svg)

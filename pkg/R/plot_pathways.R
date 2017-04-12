@@ -129,6 +129,7 @@ plot_pathways<-
             make_plot_graph(allnodes=allnodes_alledges$allnodes
                             ,alledges=allnodes_alledges$alledges
                             ,pw_name=pw_to_plot_name
+                            ,pw_id=pw_to_plot
                             ,to_html=to_html
                             ,to_svg=to_svg)
         }
