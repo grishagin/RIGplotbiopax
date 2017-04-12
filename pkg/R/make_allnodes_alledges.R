@@ -25,6 +25,7 @@ make_allnodes_alledges<-
             new_to
             
         nodes_list$vocab_df$id<-
+            nodes_list$vocab_df$id %>% 
             mapvalues(from=old_to
                       ,to=new_to)
          
