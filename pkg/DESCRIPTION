@@ -8,7 +8,9 @@ Depends:
 	data.table,
     rBiopaxParser,
     RIGessentials,
-	RIGbiopax
+	RIGbiopax,
+	DiagrammeR,
+	htmlwidgets
 Imports:
     data.table
 Date: 2017-04-12
