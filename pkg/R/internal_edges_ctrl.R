@@ -63,26 +63,26 @@ internal_edges_ctrl<-
                                             ,label)]
         
         # controllers to xref edges
-        edges$cer2dbid_df<-
-            controls_df[!is.na(xref) &
-                            !is.na(cer)][,.(from=cer
-                                            ,to=xref
-                                            ,type="dbid")]
+        # edges$cer2dbid_df<-
+        #     controls_df[!is.na(xref) &
+        #                     !is.na(cer)][,.(from=cer
+        #                                     ,to=xref
+        #                                     ,type="dbid")]
         
-        # controllers to xref edges
+        # controlleds to xref edges
         edges$ced2dbid_df<-
             controls_df[!is.na(xref) &
                             !is.na(ced)][,.(from=ced
                                             ,to=xref
                                             ,type="dbid")]
-        # controllers to xref edges
-        edges$cer2ev_df<-
-            controls_df[!is.na(evidence) &
-                            !is.na(cer)][,.(from=cer
-                                            ,to=evidence
-                                            ,type="Evidence")]
+        # controllers to evidence edges
+        # edges$cer2ev_df<-
+        #     controls_df[!is.na(evidence) &
+        #                     !is.na(cer)][,.(from=cer
+        #                                     ,to=evidence
+        #                                     ,type="Evidence")]
         
-        # controllers to xref edges
+        # controlleds to evidence edges
         edges$ced2ev_df<-
             controls_df[!is.na(evidence) &
                             !is.na(ced)][,.(from=ced

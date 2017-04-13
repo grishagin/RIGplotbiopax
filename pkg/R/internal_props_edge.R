@@ -17,8 +17,8 @@ internal_props_edge<-
                              ,Interaction="Interaction"
                              ,RelationshipType="Relationship Type")
                        ,color=
-                           c(ACTIVATION="gray40"
-                             ,INHIBITION="gray40"
+                           c(ACTIVATION="darkgreen"
+                             ,INHIBITION="red3"
                              ,UNKNOWNCTRL="gray40"
                              ,cplx="gray40"
                              ,left="gray40"
