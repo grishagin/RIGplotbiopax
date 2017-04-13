@@ -62,32 +62,36 @@ internal_edges_ctrl<-
                                             ,type
                                             ,label)]
         
-        # controllers to xref edges
-        # edges$cer2dbid_df<-
-        #     controls_df[!is.na(xref) &
-        #                     !is.na(cer)][,.(from=cer
-        #                                     ,to=xref
-        #                                     ,type="dbid")]
-        
         # controlleds to xref edges
         edges$ced2dbid_df<-
             controls_df[!is.na(xref) &
                             !is.na(ced)][,.(from=ced
                                             ,to=xref
                                             ,type="dbid")]
-        # controllers to evidence edges
-        # edges$cer2ev_df<-
-        #     controls_df[!is.na(evidence) &
-        #                     !is.na(cer)][,.(from=cer
-        #                                     ,to=evidence
-        #                                     ,type="Evidence")]
+        # controllers to xref edges
+        # for when the controlleds are NA
+        edges$cer2dbid_df<-
+            controls_df[!is.na(xref) &
+                            !is.na(cer) &
+                            is.na(ced)][,.(from=cer
+                                            ,to=xref
+                                            ,type="dbid")]
         
         # controlleds to evidence edges
         edges$ced2ev_df<-
             controls_df[!is.na(evidence) &
                             !is.na(ced)][,.(from=ced
                                             ,to=evidence
+                                            ,type="Evidence")] 
+        # controllers to evidence edges
+        # for when the controlleds are NA
+        edges$cer2ev_df<-
+            controls_df[!is.na(evidence) &
+                            !is.na(cer) &
+                            is.na(ced)][,.(from=cer
+                                            ,to=evidence
                                             ,type="Evidence")]
+        
         alledges<-
             edges %>% 
             do.call(rbind.fill
