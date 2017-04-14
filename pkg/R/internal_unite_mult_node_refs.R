@@ -43,8 +43,8 @@ internal_merge_mult_node_refs<-
                                   ,patternToMerge = "\n"
                                   ,return_other_cols=TRUE)
         
-        return(list(allnodes=allnodes
-                    ,alledges=alledges))
+        return(list(allnodes=unique(allnodes)
+                    ,alledges=unique(alledges)))
     }
 
        

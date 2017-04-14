@@ -42,8 +42,6 @@ internal_split_mult_node_refs<-
             mapvalues(from=replace_dict$to
                       ,to=replace_dict$newto)
         
-        print("boo")
-
         #now split up the newly replaced from ids
         alledges<-
             alledges %>% 
@@ -65,6 +63,6 @@ internal_split_mult_node_refs<-
                                    ,patternToSplit = ";") %>% 
             as.data.table
 
-        return(list(allnodes=allnodes
-                    ,alledges=alledges))
+        return(list(allnodes=unique(allnodes)
+                    ,alledges=unique(alledges)))
     }

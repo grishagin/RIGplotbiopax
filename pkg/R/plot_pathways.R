@@ -1,6 +1,7 @@
 plot_pathways<-
     function(biopax
              ,pw_ids
+             ,verbose=FALSE
              ,...){
         
         #' @title 
@@ -9,6 +10,7 @@ plot_pathways<-
         #' Takes in a BioPAX object and pathway ids, and  .
         #' @param biopax A BioPAX object.
         #' @param pw_ids IDs of pathways to plot.
+        #' @param verbose Boolean. Show all warnings?
         #' @param ... Optional \code{to_html} and \code{to_svg} parameters passed to \code{make_plot_graph}.
         #' 
         #' @author 
@@ -116,22 +118,35 @@ plot_pathways<-
             #control components edge dfs
             edges$ctrl_df<-
                 internal_edges_ctrl(pw_biopax)
-            
             ####################################################################################################
-            ######################## all nodes and edges 
-            allnodes_alledges<-
-                make_allnodes_alledges(nodes_list=nodes
-                                       ,edges_list=edges
-                                       ,exclude_ids=pw_to_plot)
-            
-            ####################################################################################################
-            ######################## do the plotting
-            make_plot_graph(allnodes=allnodes_alledges$allnodes
-                            ,alledges=allnodes_alledges$alledges
-                            ,pw_name=pw_to_plot_name
-                            ,pw_id=pw_to_plot
-                            ,to_html=to_html
-                            ,to_svg=to_svg)
+            ######################## all nodes and edges do the plotting
+            if(verbose){
+                allnodes_alledges<-
+                    make_allnodes_alledges(nodes_list=nodes
+                                           ,edges_list=edges
+                                           ,exclude_ids=pw_to_plot)
+
+                make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                ,alledges=allnodes_alledges$alledges
+                                ,pw_name=pw_to_plot_name
+                                ,pw_id=pw_to_plot
+                                ,to_html=to_html
+                                ,to_svg=to_svg)
+            } else {
+                 suppressWarnings(
+                    allnodes_alledges<-
+                        make_allnodes_alledges(nodes_list=nodes
+                                               ,edges_list=edges
+                                               ,exclude_ids=pw_to_plot)
+                    
+                    make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                    ,alledges=allnodes_alledges$alledges
+                                    ,pw_name=pw_to_plot_name
+                                    ,pw_id=pw_to_plot
+                                    ,to_html=to_html
+                                    ,to_svg=to_svg)
+                )
+            }
         }
        
         return(NULL)
