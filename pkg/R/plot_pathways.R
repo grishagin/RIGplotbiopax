@@ -119,12 +119,13 @@ plot_pathways<-
             edges$ctrl_df<-
                 internal_edges_ctrl(pw_biopax)
             ####################################################################################################
-            ######################## all nodes and edges do the plotting
+            ######################## prepare all nodes and edges do the plotting
             if(verbose){
                 allnodes_alledges<-
                     make_allnodes_alledges(nodes_list=nodes
                                            ,edges_list=edges
-                                           ,exclude_ids=pw_to_plot)
+                                           ,exclude_ids=pw_to_plot
+                                           ,verbose=verbose)
 
                 make_plot_graph(allnodes=allnodes_alledges$allnodes
                                 ,alledges=allnodes_alledges$alledges
@@ -137,7 +138,8 @@ plot_pathways<-
                     allnodes_alledges<-
                         make_allnodes_alledges(nodes_list=nodes
                                                ,edges_list=edges
-                                               ,exclude_ids=pw_to_plot))
+                                               ,exclude_ids=pw_to_plot
+                                               ,verbose=verbose))
                 
                 suppressWarnings(
                     make_plot_graph(allnodes=allnodes_alledges$allnodes

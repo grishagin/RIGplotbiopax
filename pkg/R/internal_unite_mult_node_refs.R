@@ -1,6 +1,7 @@
 internal_merge_mult_node_refs<-
     function(nodes_edges_list
-             ,ntype){
+             ,ntype
+             ,verbose=FALSE){
         allnodes<-
             nodes_edges_list[[1]]
         alledges<-
@@ -23,7 +24,8 @@ internal_merge_mult_node_refs<-
         alledges$from<-
             alledges$from %>% 
             mapvalues(from=merge_dict$to
-                      ,to=merge_dict$newto) 
+                      ,to=merge_dict$newto
+                      ,warn_missing = verbose) 
         
         alledges[!is.na(newto)]$to<-
             alledges[!is.na(newto)]$newto
@@ -33,7 +35,8 @@ internal_merge_mult_node_refs<-
         allnodes$id<-
             allnodes$id %>% 
             mapvalues(from=merge_dict$to
-                      ,to=merge_dict$newto) 
+                      ,to=merge_dict$newto
+                      ,warn_missing = verbose) 
         
         #...and merge their labels accordingly -- by id
         allnodes<-

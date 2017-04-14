@@ -1,7 +1,8 @@
 make_allnodes_alledges<-
     function(nodes_list
              ,edges_list
-             ,exclude_ids=NULL){
+             ,exclude_ids=NULL
+             ,verbose=FALSE){
         
         #' @title 
         #' Make Dataframe with All Nodes and All Edges
@@ -45,10 +46,14 @@ make_allnodes_alledges<-
         nodes_edges_list<-
             internal_split_mult_node_refs(list(allnodes
                                                ,alledges)
-                                          ,ntype=unique(nodes_list$vocab_df$type)) %>% 
-            internal_split_mult_node_refs(ntype="dbid") %>% 
-            internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)) %>% 
-            internal_merge_mult_node_refs(ntype="dbid") 
+                                          ,ntype=unique(nodes_list$vocab_df$type)
+                                          ,verbose=verbose) %>% 
+            internal_split_mult_node_refs(ntype="dbid"
+                                          ,verbose=verbose) %>% 
+            internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)
+                                          ,verbose=verbose) %>% 
+            internal_merge_mult_node_refs(ntype="dbid"
+                                          ,verbose=verbose) 
         
         allnodes<-
             nodes_edges_list$allnodes

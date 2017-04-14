@@ -1,6 +1,7 @@
 internal_split_mult_node_refs<-
     function(nodes_edges_list
-             ,ntype){
+             ,ntype
+             ,verbose=FALSE){
         
         allnodes<-
             nodes_edges_list[[1]]
@@ -40,7 +41,8 @@ internal_split_mult_node_refs<-
         alledges$from<-
             alledges$from %>% 
             mapvalues(from=replace_dict$to
-                      ,to=replace_dict$newto)
+                      ,to=replace_dict$newto
+                      ,warn_missing = verbose)
         
         #now split up the newly replaced from ids
         alledges<-
@@ -55,7 +57,8 @@ internal_split_mult_node_refs<-
         allnodes$id<-
             allnodes$id %>% 
             mapvalues(from=replace_dict$to
-                      ,to=replace_dict$newto)
+                      ,to=replace_dict$newto
+                      ,warn_missing = verbose)
         
         allnodes<-
             allnodes %>% 
