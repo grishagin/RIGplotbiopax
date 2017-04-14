@@ -79,16 +79,19 @@ make_allnodes_alledges<-
         alledges$from<-
             alledges$from %>% 
             mapvalues(from=node_char2int$from
-                      ,to=node_char2int$to) %>% 
+                      ,to=node_char2int$to
+                      ,warn_missing = verbose) %>% 
             as.integer
         
         alledges$to<-
             alledges$to %>% 
             mapvalues(from=node_char2int$from
-                      ,to=node_char2int$to) %>% 
+                      ,to=node_char2int$to
+                      ,warn_missing = verbose) %>% 
             as.integer
         
-        ################add formatting to nodes and edges
+        ##################################################################################
+        ################ add formatting to nodes and edges
         #node and edge properties
         node_props<-
             internal_props_node()
