@@ -133,19 +133,19 @@ plot_pathways<-
                                 ,to_html=to_html
                                 ,to_svg=to_svg)
             } else {
-                 suppressWarnings(
+                suppressWarnings(
                     allnodes_alledges<-
                         make_allnodes_alledges(nodes_list=nodes
                                                ,edges_list=edges
-                                               ,exclude_ids=pw_to_plot)
-                    
+                                               ,exclude_ids=pw_to_plot))
+                
+                suppressWarnings(
                     make_plot_graph(allnodes=allnodes_alledges$allnodes
                                     ,alledges=allnodes_alledges$alledges
                                     ,pw_name=pw_to_plot_name
                                     ,pw_id=pw_to_plot
                                     ,to_html=to_html
-                                    ,to_svg=to_svg)
-                )
+                                    ,to_svg=to_svg))
             }
         }
        
