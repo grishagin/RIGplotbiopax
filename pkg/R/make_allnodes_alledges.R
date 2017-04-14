@@ -40,118 +40,131 @@ make_allnodes_alledges<-
         ##################################################################################
         #ensure that all vocabulary nodes (evidence and such) have unique ids
         #to avoid edge mishmash when multiple nodes connect to the same vocabulary node
-        alledges[to %in% nodes_list$vocab_df$id
-                 ,vocab_to := "TRUE"]
-        alledges[from %in% nodes_list$vocab_df$id
-                 ,dbid_to := "TRUE"]
-        alledges[vocab_to=="TRUE"
-                 ,new_to := paste0(from,to)]
-                 
-        
-        #create replacement vocabulary
-        old2new_dict<-
-            alledges[vocab_to=="TRUE"
-                     ,.(to
-                        ,new_to)] %>% 
-            merge_cols_shorten_df(colKey="to"
-                                  ,patternToMerge=";")
-        
-        #replace nodes and from edges
-        alledges$from<-
-            alledges$from %>% 
-            mapvalues(from=old2new_dict$to
-                      ,to=old2new_dict$new_to) 
-        alledges<-
-            alledges %>% 
-            split_cols_lengthen_df(colsToSplit = "from"
-                                   ,patternToSplit = ";"
-                                   ,at_once = FALSE) %>% 
-            as.data.table
-        alledges[dbid_to=="TRUE"
-                 ,new_to := paste0(from,to)]
-        
-        #update replacement vocabulary
-        old2new_dict<-
-            alledges[vocab_to=="TRUE" | dbid_to=="TRUE"
-                     ,.(to
-                        ,new_to)] %>% 
-            merge_cols_shorten_df(colKey="to"
-                                  ,patternToMerge=";")
-        
-        allnodes$id<-
-            allnodes$id %>% 
-            mapvalues(from=old2new_dict$to
-                      ,to=old2new_dict$new_to)
+        nodes_edges_list<-
+            internal_split_mult_node_refs(list(allnodes
+                                               ,alledges)
+                                          ,ntype=unique(nodes_list$vocab_df$type)) %>% 
+            internal_split_mult_node_refs(ntype="dbid") %>% 
+            internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)) %>% 
+            internal_merge_mult_node_refs(ntype="dbid") 
         
         allnodes<-
-            allnodes %>% 
-            split_cols_lengthen_df(colsToSplit = "id"
-                                   ,patternToSplit = ";") %>% 
-            as.data.table
+            nodes_edges_list$allnodes
+        alledges<-
+            nodes_edges_list$alledges
         
-        alledges[!is.na(new_to)
-                  ,to := new_to]
+        # alledges[to %in% nodes_list$vocab_df$id
+        #          ,vocab_to := "TRUE"]
+        # alledges[from %in% nodes_list$vocab_df$id
+        #          ,dbid_to := "TRUE"]
+        # alledges[vocab_to=="TRUE"
+        #          ,new_to := paste0(from,to)]
+        #          
+        # 
+        # #create replacement vocabulary
+        # old2new_dict<-
+        #     alledges[vocab_to=="TRUE"
+        #              ,.(to
+        #                 ,new_to)] %>% 
+        #     merge_cols_shorten_df(colKey="to"
+        #                           ,patternToMerge=";")
+        # 
+        # #replace nodes and from edges
+        # alledges$from<-
+        #     alledges$from %>% 
+        #     mapvalues(from=old2new_dict$to
+        #               ,to=old2new_dict$new_to) 
+        # alledges<-
+        #     alledges %>% 
+        #     split_cols_lengthen_df(colsToSplit = "from"
+        #                            ,patternToSplit = ";"
+        #                            ,at_once = FALSE) %>% 
+        #     as.data.table
+        # alledges[dbid_to=="TRUE"
+        #          ,new_to := paste0(from,to)]
+        # 
+        # #update replacement vocabulary
+        # old2new_dict<-
+        #     alledges[vocab_to=="TRUE" | dbid_to=="TRUE"
+        #              ,.(to
+        #                 ,new_to)] %>% 
+        #     merge_cols_shorten_df(colKey="to"
+        #                           ,patternToMerge=";")
+        # 
+        # allnodes$id<-
+        #     allnodes$id %>% 
+        #     mapvalues(from=old2new_dict$to
+        #               ,to=old2new_dict$new_to)
+        # 
+        # allnodes<-
+        #     allnodes %>% 
+        #     split_cols_lengthen_df(colsToSplit = "id"
+        #                            ,patternToSplit = ";") %>% 
+        #     as.data.table
+        # 
+        # alledges[!is.na(new_to)
+        #           ,to := new_to]
         ##################################################################################
-        #unite all vocab nodes that are referenced by one and the same other node
-        
-        #which ids refer to vocab nodes
-        alledges[vocab_to=="TRUE"
-                 ,new_vocab_to := paste0(from
-                                         ,"vocab")]
-        #make up a dict of what to replace with what
-        merge_dict<-
-            alledges[vocab_to=="TRUE"
-                     ,.(to
-                        ,new_to=new_vocab_to)]
-        #and then replace those edges' from values
-        alledges$from<-
-            alledges$from %>% 
-            mapvalues(from=merge_dict$to
-                      ,to=merge_dict$new_to) 
-        alledges[vocab_to=="TRUE"
-                 ,to := new_vocab_to]
-        
-        #then do the same thing for dbids
-        #which ids refer to dbid nodes
-        alledges[dbid_to=="TRUE"
-                 ,new_dbid_to := paste0(from
-                                        ,"dbid")]
-        #make up a dict of what to replace with what
-        merge_dict<-
-            alledges[dbid_to=="TRUE"
-                     ,.(to
-                        ,new_to=new_dbid_to)] %>% 
-            rbind(merge_dict
-                  ,.)
-        #and then replace those edges' from values
-        alledges$from<-
-            alledges$from %>% 
-            mapvalues(from=merge_dict$to
-                      ,to=merge_dict$new_to) 
-        alledges[dbid_to=="TRUE"
-                 ,to := new_dbid_to]
-        
-        #replace allnodes id values
-        allnodes$id<-
-            allnodes$id %>% 
-            mapvalues(from=merge_dict$to
-                      ,to=merge_dict$new_to) 
-        #and merge their labels accordingly -- by id
-        allnodes[,label := paste(label,collapse="\n")
-                 ,by=id] 
-        allnodes<-
-            allnodes %>% 
-            unique
-        
-        alledges$vocab_to<-NULL
-        alledges$dbid_to<-NULL
-        alledges$new_to<-NULL
-        alledges$new_vocab_to<-NULL
-        alledges$new_dbid_to<-NULL
-        
-        alledges<-
-            alledges %>% 
-            unique
+        # #unite all vocab nodes that are referenced by one and the same other node
+        # 
+        # #which ids refer to vocab nodes
+        # alledges[vocab_to=="TRUE"
+        #          ,new_vocab_to := paste0(from
+        #                                  ,"vocab")]
+        # #make up a dict of what to replace with what
+        # merge_dict<-
+        #     alledges[vocab_to=="TRUE"
+        #              ,.(to
+        #                 ,new_to=new_vocab_to)]
+        # #and then replace those edges' from values
+        # alledges$from<-
+        #     alledges$from %>% 
+        #     mapvalues(from=merge_dict$to
+        #               ,to=merge_dict$new_to) 
+        # alledges[vocab_to=="TRUE"
+        #          ,to := new_vocab_to]
+        # 
+        # #then do the same thing for dbids
+        # #which ids refer to dbid nodes
+        # alledges[dbid_to=="TRUE"
+        #          ,new_dbid_to := paste0(from
+        #                                 ,"dbid")]
+        # #make up a dict of what to replace with what
+        # merge_dict<-
+        #     alledges[dbid_to=="TRUE"
+        #              ,.(to
+        #                 ,new_to=new_dbid_to)] %>% 
+        #     rbind(merge_dict
+        #           ,.)
+        # #and then replace those edges' from values
+        # alledges$from<-
+        #     alledges$from %>% 
+        #     mapvalues(from=merge_dict$to
+        #               ,to=merge_dict$new_to) 
+        # alledges[dbid_to=="TRUE"
+        #          ,to := new_dbid_to]
+        # 
+        # #replace allnodes id values
+        # allnodes$id<-
+        #     allnodes$id %>% 
+        #     mapvalues(from=merge_dict$to
+        #               ,to=merge_dict$new_to) 
+        # #and merge their labels accordingly -- by id
+        # allnodes[,label := paste(label,collapse="\n")
+        #          ,by=id] 
+        # allnodes<-
+        #     allnodes %>% 
+        #     unique
+        # 
+        # alledges$vocab_to<-NULL
+        # alledges$dbid_to<-NULL
+        # alledges$new_to<-NULL
+        # alledges$new_vocab_to<-NULL
+        # alledges$new_dbid_to<-NULL
+        # 
+        # alledges<-
+        #     alledges %>% 
+        #     unique
         ##################################################################################
         
         #make up a dictionary of replacements for nodes and edges

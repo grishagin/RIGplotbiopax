@@ -1,7 +1,7 @@
 Package: RIGplotbiopax
 Type: Package
 Title: Plot BioPAX Pathways
-Version: 1.1
+Version: 1.2
 Depends:
     plyr,
     dplyr,
@@ -13,7 +13,7 @@ Depends:
 	htmlwidgets
 Imports:
     data.table
-Date: 2017-04-12
+Date: 2017-04-14
 Author: Ivan Grishagin
 Maintainer: Ivan Grishagin <grishagin@gmail.com>
 Description: Plot desired BioPAX pathways in SVG and HTML formats.
