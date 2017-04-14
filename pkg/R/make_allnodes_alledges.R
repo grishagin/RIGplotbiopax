@@ -20,6 +20,8 @@ make_allnodes_alledges<-
             nodes_list %>% 
             do.call(rbind.fill
                     ,.) %>% 
+            #exclude unwanted ids
+            filter(!id %in% exclude_ids) %>% 
             unique
         
         #combine all edges list items
@@ -35,11 +37,9 @@ make_allnodes_alledges<-
                   to %in% allnodes$id] %>% 
             unique
         
-        #exclude unwanted ids
+        #also exclude other unwanted ids
         allnodes<-
             allnodes %>% 
-            #exclude unwanted ids
-            filter(!id %in% exclude_ids) %>% 
             #do not take into account lone dbid nodes (i.e. taxonomy)
             filter(!((!id %in% c(alledges$from
                                  ,alledges$to)) &
