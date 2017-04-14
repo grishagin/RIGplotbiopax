@@ -20,10 +20,7 @@ make_allnodes_alledges<-
             nodes_list %>% 
             do.call(rbind.fill
                     ,.) %>% 
-            unique %>% 
-            #exclude unwanted ids
-            filter(!id %in% exclude_ids) %>% 
-            as.data.table
+            unique
         
         #combine all edges list items
         #also take only those edges, that are in the nodes df
@@ -37,6 +34,17 @@ make_allnodes_alledges<-
             .[from %in% allnodes$id & 
                   to %in% allnodes$id] %>% 
             unique
+        
+        #exclude unwanted ids
+        allnodes<-
+            allnodes %>% 
+            #exclude unwanted ids
+            filter(!id %in% exclude_ids) %>% 
+            #do not take into account lone dbid nodes (i.e. taxonomy)
+            filter(!((!id %in% c(alledges$from
+                                 ,alledges$to)) &
+                         type=="dbid")) %>% 
+            as.data.table
         
         ##################################################################################
         #ensure that all vocabulary nodes (evidence and such) have unique ids

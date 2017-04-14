@@ -72,52 +72,52 @@ plot_pathways<-
             ####################################################################################################
             ######################## physical entities nodes
             nodes$physent<-
-                internal_nodes_physent(pw_biopax)
+                suppressWarnings(internal_nodes_physent(pw_biopax))
             
             ####################################################################################################
             ######################## dbid node and edges df
             #dbid nodes
             nodes$dbid_df<-
-                internal_nodes_dbid(pw_biopax)
+                suppressWarnings(internal_nodes_dbid(pw_biopax))
             #all entities to dbid edges
             edges$all2dbid_df<-
-                internal_edges_dbid(pw_biopax)
+                suppressWarnings(internal_edges_dbid(pw_biopax))
             
             ####################################################################################################
             #vocabulary nodes   
             nodes$vocab_df<-
-                internal_nodes_vocab(pw_biopax)
+                suppressWarnings(internal_nodes_vocab(pw_biopax))
             
             #physical entities to vocabulary edges
             edges$all2vocab_df<-
-                internal_edges_vocab(pw_biopax)
+                suppressWarnings(internal_edges_vocab(pw_biopax))
             
             ####################################################################################################
             ######################## complex components edge df
             #complex components edge dfs
             edges$cplx_df<-
-                internal_edges_cplx(pw_biopax)
+                suppressWarnings(internal_edges_cplx(pw_biopax))
             
             ####################################################################################################
             ######################## pathway components edge df
             #complex components edge dfs
             edges$pw2component_df<-
-                internal_edges_pw(pw_biopax)
+                suppressWarnings(internal_edges_pw(pw_biopax))
             
             ####################################################################################################
             ######################## left-right components node df
             nodes$lr_df<-
-                internal_nodes_lr(pw_biopax)
+                suppressWarnings(internal_nodes_lr(pw_biopax))
             
             #left-right components edge dfs
             edges$lr_df<-
-                internal_edges_lr(pw_biopax)
+                suppressWarnings(internal_edges_lr(pw_biopax))
             
             ####################################################################################################
             ######################## control edges df
             #control components edge dfs
             edges$ctrl_df<-
-                internal_edges_ctrl(pw_biopax)
+                suppressWarnings(internal_edges_ctrl(pw_biopax))
             ####################################################################################################
             ######################## prepare all nodes and edges do the plotting
             if(verbose){
