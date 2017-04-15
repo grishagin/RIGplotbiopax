@@ -4,7 +4,8 @@
 \alias{make_allnodes_alledges}
 \title{Make Dataframe with All Nodes and All Edges}
 \usage{
-make_allnodes_alledges(nodes_list, edges_list, exclude_ids = NULL)
+make_allnodes_alledges(nodes_list, edges_list, exclude_ids = NULL,
+  verbose = FALSE)
 }
 \arguments{
 \item{nodes_list}{List containing dataframes with all nodes.}

@@ -8,9 +8,9 @@ internal_nodes_lr<-
         
         lr_nodes<-
             biopax$dt[class %in% node_lr_classes
-                      ,.(label=paste(property_value[property_value!=""
-                                                    & property!="spontaneous"]
-                                     ,collapse="|")
+                      ,.(label=""
+                         #rather not have labels -- for clarity
+                         #label=paste(property_value[property_value!="" & property!="spontaneous"],collapse="|")
                          ,spontaneous=property_value[property=="spontaneous"]
                          ,type=class)
                       ,by=id] %>% 

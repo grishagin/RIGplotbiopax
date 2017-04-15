@@ -193,12 +193,12 @@ internal_props_node<-
                              ,DNA=FALSE
                              ,Pathway=FALSE
                              
-                             ,BiochemicalReaction=FALSE
-                             ,TemplateReaction=FALSE
-                             ,ComplexAssembly=FALSE
-                             ,Transport=FALSE
-                             ,TransportWithBiochemicalReaction=FALSE
-                             ,Degradation=FALSE
+                             ,BiochemicalReaction=TRUE
+                             ,TemplateReaction=TRUE
+                             ,ComplexAssembly=TRUE
+                             ,Transport=TRUE
+                             ,TransportWithBiochemicalReaction=TRUE
+                             ,Degradation=TRUE
                              
                              ,dbid=FALSE
                              

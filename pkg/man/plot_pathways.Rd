@@ -4,12 +4,14 @@
 \alias{plot_pathways}
 \title{Plot Pathways}
 \usage{
-plot_pathways(biopax, pw_ids, ...)
+plot_pathways(biopax, pw_ids, verbose = FALSE, ...)
 }
 \arguments{
 \item{biopax}{A BioPAX object.}
 
 \item{pw_ids}{IDs of pathways to plot.}
+
+\item{verbose}{Boolean. Show all warnings?}
 
 \item{...}{Optional \code{to_html} and \code{to_svg} parameters passed to \code{make_plot_graph}.}
 }
