@@ -59,8 +59,8 @@ make_plot_graph<-
                        ,pw_id
                        ,".svg")
             #export
-            export_graph(graph_diag
-                         ,filename_diag_svg)
+            try(export_graph(graph_diag
+                             ,filename_diag_svg))
         }
 
     }
