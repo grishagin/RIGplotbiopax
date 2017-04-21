@@ -60,7 +60,7 @@ make_allnodes_alledges<-
                                           ,verbose=verbose) %>% 
             internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)
                                           ,verbose=verbose
-                                          ,,sep="\n") %>% 
+                                          ,sep="\n") %>% 
             internal_merge_mult_node_refs(ntype="dbid"
                                           ,verbose=verbose
                                           ,sep="|") 
