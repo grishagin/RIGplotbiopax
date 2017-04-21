@@ -1,7 +1,7 @@
 Package: RIGplotbiopax
 Type: Package
 Title: Plot BioPAX Pathways
-Version: 1.3
+Version: 1.4
 Depends:
     plyr,
     dplyr,
@@ -10,12 +10,13 @@ Depends:
     RIGessentials,
 	RIGbiopax,
 	DiagrammeR,
+	DiagrammeRsvg,
 	htmlwidgets
 Imports:
     data.table
-Date: 2017-04-14
+Date: 2017-04-20
 Author: Ivan Grishagin
 Maintainer: Ivan Grishagin <grishagin@gmail.com>
-Description: Plot desired BioPAX pathways in SVG and HTML formats.
+Description: Plot desired BioPAX pathways in SVG format.
 License: GPL-2
 RoxygenNote: 6.0.1

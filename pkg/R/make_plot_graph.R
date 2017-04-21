@@ -2,9 +2,7 @@ make_plot_graph<-
     function(allnodes
              ,alledges
              ,pw_id=NULL
-             ,pw_name="Pathway"
-             ,to_html=TRUE
-             ,to_svg=TRUE){  
+             ,pw_name="Pathway"){  
         
         #' @title 
         #' Make and Plot BioPAX Graph
@@ -18,6 +16,7 @@ make_plot_graph<-
         #' @author 
         #' Ivan Grishagin
         
+        ########################################################
         #replace quotation marks with backticks to avoid error
         allnodes$label<-
             allnodes$label %>% 
@@ -25,9 +24,38 @@ make_plot_graph<-
                  ,"`"
                  ,.)
         
-        #create the graph
-        #svg/html generation via diagrammer
-        graph_diag<-
+        ########################################################
+        #discover all nodes that link to dbid nodes
+        dbid_ids<-
+            allnodes[tooltip=="ID"]$id %>% 
+            unique
+        
+        #find all nodesthat refer to those id nodes
+        #find their tags inthe svg string
+        #and modify those tags by adding attributes to them 
+        to_dbid_df<-
+            alledges[to %in% dbid_ids
+                     ,.(physent_id=from
+                        ,from_tag=paste0("<g id=\"a_node"
+                                         ,from
+                                         ,"\"")
+                        ,to_tag=paste0("<g id=\"a_node"
+                                       ,from
+                                       ,"\" class=\"clickable\" data=\""
+                                       ,allnodes[id==to]$label
+                                       ,"\""))
+                     ,by=id]
+        
+        #remove dbid nodes from the allnodes and alledges
+        allnodes<-
+            allnodes[!id %in% dbid_ids]
+        alledges<-
+            allnodes[!to %in% dbid_ids]
+        
+        ########################################################
+        #generate svg code via dot
+        graph_svg<-
+            #first, make diagrammer graph
             create_graph(nodes_df = allnodes
                          ,edges_df = alledges) %>% 
             add_global_graph_attrs("overlap", "false", "graph") %>% 
@@ -35,32 +63,27 @@ make_plot_graph<-
             add_global_graph_attrs("layout","dot","graph") %>% 
             add_global_graph_attrs("tooltip"
                                    ,pw_name
-                                   ,"graph") 
-      
+                                   ,"graph") %>% 
+            #generate dot, then grviz code, and then svg string
+            generate_dot %>% 
+            grViz %>% 
+            export_svg %>% 
+            #replace selected node tags with their modified versions
+            mgsub(pattern=to_dbid_df$from_tag
+                  ,replacement=to_dbid_df$to_tag
+                  ,text.var = .
+                  ,trim=FALSE)
         
-        if(to_html){
-            #filenames
-            filename_diag_html<-
-                paste0(Sys.Date()
-                       ,"_"
-                       ,pw_id
-                       ,".html")
-            #render graph
-            render<-
-                render_graph(graph_diag)
-            
-            #save as html
-            saveWidget(render,filename_diag_html)
-        }
-        if(to_svg){
-            filename_diag_svg<-
-                paste0(Sys.Date()
-                       ,"_"
-                       ,pw_id
-                       ,".svg")
-            #export
-            try(export_graph(graph_diag
-                             ,filename_diag_svg))
-        }
+        
+        #save the file
+        filename<-
+            paste0(Sys.Date()
+                   ,"_"
+                   ,pw_id
+                   ,".svg")
+        
+        writeLines(graph_svg
+                   ,filename
+                   ,useBytes = TRUE)
 
     }
