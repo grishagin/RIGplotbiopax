@@ -44,13 +44,13 @@ make_plot_graph<-
                                        ,"\" class=\"clickable\" data=\""
                                        ,allnodes[id==to]$label
                                        ,"\""))
-                     ,by=id]
+                     ,by=to]
         
         #remove dbid nodes from the allnodes and alledges
         allnodes<-
             allnodes[!id %in% dbid_ids]
         alledges<-
-            allnodes[!to %in% dbid_ids]
+            alledges[!to %in% dbid_ids]
         
         ########################################################
         #generate svg code via dot
