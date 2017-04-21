@@ -1,8 +1,7 @@
 plot_pathways<-
     function(biopax
              ,pw_ids
-             ,verbose=FALSE
-             ,...){
+             ,verbose=FALSE){
         
         #' @title 
         #' Plot Pathways
@@ -11,27 +10,9 @@ plot_pathways<-
         #' @param biopax A BioPAX object.
         #' @param pw_ids IDs of pathways to plot.
         #' @param verbose Boolean. Show all warnings?
-        #' @param ... Optional \code{to_html} and \code{to_svg} parameters passed to \code{make_plot_graph}.
         #' 
         #' @author 
         #' Ivan Grishagin
-        
-        #check for and assign add-l parameters
-        dots<-
-            list(...)
-
-        if(!is.null(dots$to_html)){
-            to_html<-
-                dots$to_html
-        } else {
-            to_html<-TRUE
-        }
-        if(!is.null(dots$to_svg)){
-            to_svg<-
-                dots$to_svg
-        } else {
-            to_svg<-TRUE
-        }
         
         ####################################################################################################
         ######################## prepare biopax
@@ -130,9 +111,7 @@ plot_pathways<-
                 make_plot_graph(allnodes=allnodes_alledges$allnodes
                                 ,alledges=allnodes_alledges$alledges
                                 ,pw_name=pw_to_plot_name
-                                ,pw_id=pw_to_plot
-                                ,to_html=to_html
-                                ,to_svg=to_svg)
+                                ,pw_id=pw_to_plot)
             } else {
                 suppressWarnings(
                     allnodes_alledges<-
@@ -145,9 +124,7 @@ plot_pathways<-
                     make_plot_graph(allnodes=allnodes_alledges$allnodes
                                     ,alledges=allnodes_alledges$alledges
                                     ,pw_name=pw_to_plot_name
-                                    ,pw_id=pw_to_plot
-                                    ,to_html=to_html
-                                    ,to_svg=to_svg))
+                                    ,pw_id=pw_to_plot))
             }
         }
        
