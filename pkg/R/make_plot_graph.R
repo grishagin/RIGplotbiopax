@@ -73,22 +73,19 @@ make_plot_graph<-
         alledges$from<-
             alledges$from %>% 
             mapvalues(from=node_id_dict$from
-                      ,to=node_id_dict$to
-                      ,warn_missing = verbose) %>% 
+                      ,to=node_id_dict$to) %>% 
             as.integer
         alledges$to<-
             alledges$to %>% 
             mapvalues(from=node_id_dict$from
-                      ,to=node_id_dict$to
-                      ,warn_missing = verbose) %>% 
+                      ,to=node_id_dict$to) %>% 
             as.integer
         
         #replace all nodes referring to former dbid nodes
         to_dbid_df$physent_id<-
             to_dbid_df$physent_id %>% 
             mapvalues(from=node_id_dict$from
-                      ,to=node_id_dict$to
-                      ,warn_missing = verbose) %>% 
+                      ,to=node_id_dict$to) %>% 
             as.integer
         
         #prepare the final replacement dictionary 
