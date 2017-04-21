@@ -24,8 +24,14 @@ make_allnodes_alledges<-
             filter(!id %in% exclude_ids) %>% 
             unique
         
-        dbid_ids<-
-            allnodes$id[allnodes$type=="dbid"] %>% 
+        #get all dbid/vocab node ids
+        dbid_vocab_ids<-
+            allnodes$id[allnodes$type %in% c("dbid"
+                                             ,"CellularLocation"
+                                             ,"SequenceModification"
+                                             ,"Evidence"
+                                             ,"Interaction"
+                                             ,"RelationshipType")] %>% 
             unique
         
         #combine all edges list items
@@ -39,8 +45,8 @@ make_allnodes_alledges<-
                   !is.na(to)] %>% 
             .[from %in% allnodes$id & 
                   to %in% allnodes$id] %>% 
-            #also don't take cases of dbid nodes referring to anything
-            .[!from %in% dbid_ids] %>% 
+            #also exclude orphan vocab/dbid pairs (not referred to by anything)
+            .[!from %in% dbid_vocab_ids[!dbid_vocab_ids %in% to]]
             unique
         
         #also exclude other unwanted ids
@@ -50,12 +56,7 @@ make_allnodes_alledges<-
             #i.e. dbid nodes not mentioned among edges at all
             filter(!((!id %in% c(alledges$from
                                  ,alledges$to)) &
-                         type %in% c("dbid"
-                                     ,"CellularLocation"
-                                     ,"SequenceModification"
-                                     ,"Evidence"
-                                     ,"Interaction"
-                                     ,"RelationshipType"))) %>% 
+                         id %in% dbid_vocab_ids)) %>% 
             as.data.table
         
         ##################################################################################
