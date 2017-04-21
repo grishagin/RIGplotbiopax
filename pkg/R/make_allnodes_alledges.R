@@ -46,11 +46,16 @@ make_allnodes_alledges<-
         #also exclude other unwanted ids
         allnodes<-
             allnodes %>% 
-            #do not take into account lone dbid nodes (i.e. taxonomy)
+            #do not take into account lone dbid/vocabulary nodes (i.e. taxonomy)
             #i.e. dbid nodes not mentioned among edges at all
             filter(!((!id %in% c(alledges$from
                                  ,alledges$to)) &
-                         type=="dbid")) %>% 
+                         type %in% c("dbid"
+                                     ,"CellularLocation"
+                                     ,"SequenceModification"
+                                     ,"Evidence"
+                                     ,"Interaction"
+                                     ,"RelationshipType")) %>% 
             as.data.table
         
         ##################################################################################
