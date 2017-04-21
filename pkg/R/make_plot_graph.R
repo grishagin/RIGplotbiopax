@@ -30,20 +30,12 @@ make_plot_graph<-
             allnodes[tooltip=="ID"]$id %>% 
             unique
         
-        #find all nodesthat refer to those id nodes
-        #find their tags inthe svg string
-        #and modify those tags by adding attributes to them 
+        #find all nodes that refer to those dbid nodes
         to_dbid_df<-
             alledges[to %in% dbid_ids
-                     ,.(physent_id=from
-                        ,from_tag=paste0("<g id=\"a_node"
-                                         ,from
-                                         ,"\"")
-                        ,to_tag=paste0("<g id=\"a_node"
-                                       ,from
-                                       ,"\" class=\"clickable\" data=\""
-                                       ,allnodes[id==to]$label
-                                       ,"\""))
+                     ,.(physent_id=paste0(from
+                                          ,"OLD")
+                        ,dbid_label=allnodes[id==to]$label)
                      ,by=to]
         
         #remove dbid nodes from the allnodes and alledges
@@ -51,6 +43,66 @@ make_plot_graph<-
             allnodes[!id %in% dbid_ids]
         alledges<-
             alledges[!to %in% dbid_ids]
+        
+        ########################################################
+        #since some nodes were removed, replace ids!
+        #ensure that old ids have distinct names
+        allnodes$id<-
+            allnodes$id %>% 
+            paste0("OLD")
+        alledges$from<-
+            alledges$from %>% 
+            paste0("OLD")
+        alledges$to<-
+            alledges$to %>% 
+            paste0("OLD")
+        
+        #make up a dictionary of replacements for nodes and edges
+        #to ensure that nodes ids are the same as their row numbers
+        node_id_dict<-
+            data.frame(from=allnodes$id
+                       ,to=1:nrow(allnodes))
+        #replace char ids with int ids
+        allnodes$id<-
+            node_id_dict$to
+        #replace edges ids
+        alledges$id<-
+            1:nrow(alledges)
+        
+        #now replace all edges references with integers, same as with nodes
+        alledges$from<-
+            alledges$from %>% 
+            mapvalues(from=node_id_dict$from
+                      ,to=node_id_dict$to
+                      ,warn_missing = verbose) %>% 
+            as.integer
+        alledges$to<-
+            alledges$to %>% 
+            mapvalues(from=node_id_dict$from
+                      ,to=node_id_dict$to
+                      ,warn_missing = verbose) %>% 
+            as.integer
+        
+        #replace all nodes referring to former dbid nodes
+        to_dbid_df$physent_id<-
+            to_dbid_df$physent_id %>% 
+            mapvalues(from=node_id_dict$from
+                      ,to=node_id_dict$to
+                      ,warn_missing = verbose) %>% 
+            as.integer
+        
+        #prepare the final replacement dictionary 
+        #to alter the svg string
+        #to add attributes to xml tags
+        to_dbid_df<-
+            to_dbid_df[,.(from_tag=paste0("<g id=\"a_node"
+                                          ,physent_id
+                                          ,"\"")
+                          ,to_tag=paste0("<g id=\"a_node"
+                                         ,physent_id
+                                         ,"\" class=\"clickable\" data=\""
+                                         ,dbid_label
+                                         ,"\""))]
         
         ########################################################
         #generate svg code via dot
