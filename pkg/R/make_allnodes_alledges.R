@@ -59,9 +59,11 @@ make_allnodes_alledges<-
             internal_split_mult_node_refs(ntype="dbid"
                                           ,verbose=verbose) %>% 
             internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)
-                                          ,verbose=verbose) %>% 
+                                          ,verbose=verbose
+                                          ,,sep="\n") %>% 
             internal_merge_mult_node_refs(ntype="dbid"
-                                          ,verbose=verbose) 
+                                          ,verbose=verbose
+                                          ,sep="|") 
         
         allnodes<-
             nodes_edges_list$allnodes

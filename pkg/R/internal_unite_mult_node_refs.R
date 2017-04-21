@@ -1,7 +1,8 @@
 internal_merge_mult_node_refs<-
     function(nodes_edges_list
              ,ntype
-             ,verbose=FALSE){
+             ,verbose=FALSE
+             ,sep="|"){
         allnodes<-
             nodes_edges_list[[1]]
         alledges<-
@@ -43,7 +44,7 @@ internal_merge_mult_node_refs<-
             allnodes %>% 
             merge_cols_shorten_df(colKey = "id"
                                   ,colsToMerge = "label"
-                                  ,patternToMerge = "\n"
+                                  ,patternToMerge = sep
                                   ,return_other_cols=TRUE)
         
         return(list(allnodes=unique(allnodes)
