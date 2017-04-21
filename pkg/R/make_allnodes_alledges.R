@@ -55,7 +55,7 @@ make_allnodes_alledges<-
                                      ,"SequenceModification"
                                      ,"Evidence"
                                      ,"Interaction"
-                                     ,"RelationshipType")) %>% 
+                                     ,"RelationshipType"))) %>% 
             as.data.table
         
         ##################################################################################
