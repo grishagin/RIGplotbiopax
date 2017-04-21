@@ -24,6 +24,10 @@ make_allnodes_alledges<-
             filter(!id %in% exclude_ids) %>% 
             unique
         
+        dbid_ids<-
+            allnodes$id[allnodes$type=="dbid"] %>% 
+            unique
+        
         #combine all edges list items
         #also take only those edges, that are in the nodes df
         alledges<-
@@ -35,12 +39,15 @@ make_allnodes_alledges<-
                   !is.na(to)] %>% 
             .[from %in% allnodes$id & 
                   to %in% allnodes$id] %>% 
+            #also don't take cases of dbid nodes referring to anything
+            .[!from %in% dbid_ids] %>% 
             unique
         
         #also exclude other unwanted ids
         allnodes<-
             allnodes %>% 
             #do not take into account lone dbid nodes (i.e. taxonomy)
+            #i.e. dbid nodes not mentioned among edges at all
             filter(!((!id %in% c(alledges$from
                                  ,alledges$to)) &
                          type=="dbid")) %>% 
