@@ -100,7 +100,7 @@ make_plot_graph<-
                                           ,"\"")
                           ,to_tag=paste0("<g id=\"a_node"
                                          ,physent_id
-                                         ,"\" class=\"clickable\" data=\""
+                                         ,"\" class=\"clickable\" data-dbid=\""
                                          ,dbid_label
                                          ,"\""))]
         
