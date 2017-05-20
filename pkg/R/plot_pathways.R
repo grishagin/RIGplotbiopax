@@ -1,14 +1,16 @@
 plot_pathways<-
     function(biopax
              ,pw_ids
+             ,tag=NULL
              ,verbose=FALSE){
         
         #' @title 
         #' Plot Pathways
         #' @description 
-        #' Takes in a BioPAX object and pathway ids, and  .
+        #' Takes in a BioPAX object and pathway ids, and prepares plots in an SVG format.
         #' @param biopax A BioPAX object.
         #' @param pw_ids IDs of pathways to plot.
+        #' @param tag Additional tag for the file name (optional).
         #' @param verbose Boolean. Show all warnings?
         #' 
         #' @author 
@@ -16,20 +18,9 @@ plot_pathways<-
         
         ####################################################################################################
         ######################## prepare biopax
-        #fix classes' inconsistencies
-        biopax$dt[class=="Rna"]$class<-
-            "RNA"
-        biopax$dt[class=="RnaReference"]$class<-
-            "RNAReference"
-        biopax$dt[class=="Dna"]$class<-
-            "DNA"
-        biopax$dt[class=="DnaReference"]$class<-
-            "DNAReference"
-        
-        #remove hash signs from property attr value column (if any)
-        biopax$dt$property_attr_value<-
-            biopax$dt$property_attr_value %>% 
-            striphash
+        #fix all biopax inconsistencies etc.
+        biopax<-
+            clean_biopax
         
         ####################################################################################################
         #for each pathway, repeat
@@ -111,7 +102,8 @@ plot_pathways<-
                 make_plot_graph(allnodes=allnodes_alledges$allnodes
                                 ,alledges=allnodes_alledges$alledges
                                 ,pw_name=pw_to_plot_name
-                                ,pw_id=pw_to_plot)
+                                ,tag=paste0(pw_to_plot
+                                            ,tag))
             } else {
                 suppressWarnings(
                     allnodes_alledges<-
@@ -124,7 +116,8 @@ plot_pathways<-
                     make_plot_graph(allnodes=allnodes_alledges$allnodes
                                     ,alledges=allnodes_alledges$alledges
                                     ,pw_name=pw_to_plot_name
-                                    ,pw_id=pw_to_plot))
+                                    ,tag=paste0(pw_to_plot
+                                                ,tag)))
             }
         }
        

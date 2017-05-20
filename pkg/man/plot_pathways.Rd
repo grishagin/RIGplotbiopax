@@ -4,19 +4,19 @@
 \alias{plot_pathways}
 \title{Plot Pathways}
 \usage{
-plot_pathways(biopax, pw_ids, verbose = FALSE, ...)
+plot_pathways(biopax, pw_ids, tag = NULL, verbose = FALSE)
 }
 \arguments{
 \item{biopax}{A BioPAX object.}
 
 \item{pw_ids}{IDs of pathways to plot.}
 
-\item{verbose}{Boolean. Show all warnings?}
+\item{tag}{Additional tag for the file name (optional).}
 
-\item{...}{Optional \code{to_html} and \code{to_svg} parameters passed to \code{make_plot_graph}.}
+\item{verbose}{Boolean. Show all warnings?}
 }
 \description{
-Takes in a BioPAX object and pathway ids, and  .
+Takes in a BioPAX object and pathway ids, and prepares plots in an SVG format.
 }
 \author{
 Ivan Grishagin

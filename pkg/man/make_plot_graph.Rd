@@ -4,17 +4,16 @@
 \alias{make_plot_graph}
 \title{Make and Plot BioPAX Graph}
 \usage{
-make_plot_graph(allnodes, alledges, pw_id = NULL, pw_name = "Pathway",
-  to_html = TRUE, to_svg = TRUE)
+make_plot_graph(allnodes, alledges, tag = NULL, pw_name = "Pathway")
 }
 \arguments{
 \item{allnodes}{Dataframe with all nodes.}
 
 \item{alledges}{Dataframe with all edges.}
 
-\item{to_html}{Return html file? Has active tooltips.}
+\item{tag}{Tag for the file name.}
 
-\item{to_svg}{Return svg file?}
+\item{pw_name}{Pathway name (optional). It will show up on-hover over the SVG background.}
 }
 \description{
 Using dataframes of nodes and edges make and plot the graph.

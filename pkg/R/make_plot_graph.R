@@ -1,7 +1,7 @@
 make_plot_graph<-
     function(allnodes
              ,alledges
-             ,pw_id=NULL
+             ,tag=NULL
              ,pw_name="Pathway"){  
         
         #' @title 
@@ -10,8 +10,8 @@ make_plot_graph<-
         #' Using dataframes of nodes and edges make and plot the graph.
         #' @param allnodes Dataframe with all nodes.
         #' @param alledges Dataframe with all edges.
-        #' @param to_html Return html file? Has active tooltips.
-        #' @param to_svg Return svg file?
+        #' @param tag Tag for the file name.
+        #' @param pw_name Pathway name (optional). It will show up on-hover over the SVG background.
         #' 
         #' @author 
         #' Ivan Grishagin
@@ -131,7 +131,7 @@ make_plot_graph<-
         filename<-
             paste0(Sys.Date()
                    ,"_"
-                   ,pw_id
+                   ,tag
                    ,".svg")
         
         writeLines(graph_svg
