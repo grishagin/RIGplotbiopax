@@ -20,6 +20,7 @@ plot_pathways<-
         ######################## prepare biopax
         #fix all biopax inconsistencies etc.
         biopax<-
+            biopax %>% 
             clean_biopax
         
         ####################################################################################################
