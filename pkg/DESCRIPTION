@@ -1,7 +1,7 @@
 Package: RIGplotbiopax
 Type: Package
 Title: Plot BioPAX Pathways
-Version: 1.7.1
+Version: 1.7.2
 Depends:
     plyr,
     dplyr,

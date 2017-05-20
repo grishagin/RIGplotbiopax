@@ -19,9 +19,9 @@ plot_pathways<-
         ####################################################################################################
         ######################## prepare biopax
         #fix all biopax inconsistencies etc.
-        biopax<-
-            biopax %>% 
-            clean_biopax
+        biopax$dt$property_attr_value<-
+            biopax$dt$property_attr_value %>% 
+            striphash
         
         ####################################################################################################
         #for each pathway, repeat
