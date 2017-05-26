@@ -4,6 +4,8 @@ plot_pathways<-
              ,tag=NULL
              ,verbose=FALSE){
         
+        require(data.table)
+        
         #' @title 
         #' Plot Pathways
         #' @description 
