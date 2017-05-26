@@ -26,6 +26,9 @@ plot_pathways<-
         ####################################################################################################
         #for each pathway, repeat
         for(pw_to_plot in pw_ids){
+            message("Plotting pathway "
+                    ,pw_to_plot
+                    ,"...")
             #extract biopax instances just for a given pathway
             pw_biopax<-
                 extract_pathways_from_biopax(biopax = biopax
