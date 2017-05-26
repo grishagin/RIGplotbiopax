@@ -37,13 +37,12 @@ plot_pathways<-
                 next
             }
             
-            print(pw_biopax)
-            
             #get pathway name
             pw_to_plot_name<-
                 pw_biopax$dt[id==pw_to_plot & 
                                  grepl("name",tolower(property))][
                                      order(-nchar(property_value))]$property_value[1]
+            print(pw_to_plot_name)
             
             nodes<-list()
             edges<-list()
