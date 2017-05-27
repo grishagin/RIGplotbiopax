@@ -36,7 +36,7 @@ plot_pathways<-
             if(is.null(pw_biopax)){
                 next
             }
-            print(class(pw_biopax$dt))
+            print(colnames(pw_biopax$dt))
             #get pathway name
             pw_to_plot_name<-
                 pw_biopax$dt[id==pw_to_plot & 
