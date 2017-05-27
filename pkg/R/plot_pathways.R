@@ -36,7 +36,10 @@ plot_pathways<-
             if(is.null(pw_biopax)){
                 next
             }
-            print(colnames(pw_biopax$dt))
+            mtcars_dt<-
+                mtcars %>% 
+                as.data.table
+            print(mtcars_dt[cyl==4])
             #get pathway name
             pw_to_plot_name<-
                 pw_biopax$dt[id==pw_to_plot & 
