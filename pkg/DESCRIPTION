@@ -1,7 +1,7 @@
 Package: RIGplotbiopax
 Type: Package
 Title: Plot BioPAX Pathways
-Version: 1.7.4
+Version: 1.7.5
 Depends:
     plyr,
     dplyr,
@@ -13,7 +13,10 @@ Depends:
 	DiagrammeRsvg,
 	htmlwidgets
 Imports:
-    data.table
+    data.table,
+	DiagrammeR,
+	DiagrammeRsvg,
+	htmlwidgets
 Date: 2017-05-26
 Author: Ivan Grishagin
 Maintainer: Ivan Grishagin <grishagin@gmail.com>

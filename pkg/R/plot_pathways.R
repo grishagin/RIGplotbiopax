@@ -36,10 +36,7 @@ plot_pathways<-
             if(is.null(pw_biopax)){
                 next
             }
-            mtcars_dt<-
-                mtcars %>% 
-                as.data.table
-            print(mtcars_dt[cyl==4])
+
             #get pathway name
             pw_to_plot_name<-
                 pw_biopax$dt[id==pw_to_plot & 
@@ -107,11 +104,11 @@ plot_pathways<-
                                            ,exclude_ids=pw_to_plot
                                            ,verbose=verbose)
 
-                make_plot_graph(allnodes=allnodes_alledges$allnodes
-                                ,alledges=allnodes_alledges$alledges
-                                ,pw_name=pw_to_plot_name
-                                ,tag=paste0(pw_to_plot
-                                            ,tag))
+                try(make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                    ,alledges=allnodes_alledges$alledges
+                                    ,pw_name=pw_to_plot_name
+                                    ,tag=paste0(pw_to_plot
+                                                ,tag)))
             } else {
                 suppressWarnings(
                     allnodes_alledges<-
@@ -121,11 +118,11 @@ plot_pathways<-
                                                ,verbose=verbose))
                 
                 suppressWarnings(
-                    make_plot_graph(allnodes=allnodes_alledges$allnodes
-                                    ,alledges=allnodes_alledges$alledges
-                                    ,pw_name=pw_to_plot_name
-                                    ,tag=paste0(pw_to_plot
-                                                ,tag)))
+                    try(make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                        ,alledges=allnodes_alledges$alledges
+                                        ,pw_name=pw_to_plot_name
+                                        ,tag=paste0(pw_to_plot
+                                                    ,tag))))
             }
         }
        

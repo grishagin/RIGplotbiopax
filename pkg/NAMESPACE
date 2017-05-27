@@ -4,3 +4,6 @@ export("make_allnodes_alledges"
 		,"update_RIGplotbiopax"
 		)
 import(data.table)
+import(DiagrammeR)
+import(DiagrammeRsvg)
+import(htmlwidgets)
