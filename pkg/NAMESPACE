@@ -3,4 +3,4 @@ export("make_allnodes_alledges"
 		,"plot_pathways"
 		,"update_RIGplotbiopax"
 		)
-.datatable.aware = TRUE
+import(data.table)
