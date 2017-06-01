@@ -22,6 +22,10 @@ internal_edges_ctrl<-
                       )
                       ,by=id]
         
+        if(nrow(controls_df)<1){
+            return(NULL)
+        }
+        
         #find the ids that the evidence ids are referring to, and merge them using ; as separator
         #the reason's that vocabulary function will refer evidence ids to the control components
         #whereas we are excluding them from being physical nodes
