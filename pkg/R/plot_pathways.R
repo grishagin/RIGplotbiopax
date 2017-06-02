@@ -43,13 +43,13 @@ plot_pathways<-
                 #split the pathway up roughly in chuncks of 10000 instances
                 #will end up having more 
                 #as some instances will be duplicated in each chunck
-                Nchuncks<-
+                Nchunks<-
                     ceiling(nrow(pw_biopax$dt)/10000)
                     
                 pw_biopax_list<-
                     pw_biopax %>% 
                     split_pathway_into_chunks(pw_id=pw_to_plot
-                                              ,Nchunks=Nchuncks)
+                                              ,Nchunks=Nchunks)
             }else{
                 pw_biopax_list<-
                     list(pw_biopax)
