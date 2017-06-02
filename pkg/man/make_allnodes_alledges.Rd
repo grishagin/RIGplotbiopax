@@ -4,15 +4,14 @@
 \alias{make_allnodes_alledges}
 \title{Make Dataframe with All Nodes and All Edges}
 \usage{
-make_allnodes_alledges(nodes_list, edges_list, exclude_ids = NULL,
-  verbose = FALSE)
+make_allnodes_alledges(pw_biopax, exclude_ids = NULL, verbose = FALSE)
 }
 \arguments{
-\item{nodes_list}{List containing dataframes with all nodes.}
-
-\item{edges_list}{List containing dataframes with all edges.}
+\item{pw_biopax}{Pathway as a BioPAX object.}
 
 \item{exclude_ids}{Component ids to exclude from graph.}
+
+\item{verbose}{Boolean. Show all warnings?}
 }
 \description{
 Make fully annotated dataframes with all nodes and all edges required to make a graph.

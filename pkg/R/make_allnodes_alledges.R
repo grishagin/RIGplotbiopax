@@ -1,6 +1,5 @@
 make_allnodes_alledges<-
-    function(nodes_list
-             ,edges_list
+    function(pw_biopax
              ,exclude_ids=NULL
              ,verbose=FALSE){
         
@@ -8,13 +7,21 @@ make_allnodes_alledges<-
         #' Make Dataframe with All Nodes and All Edges
         #' @description 
         #' Make fully annotated dataframes with all nodes and all edges required to make a graph.
-        #' @param nodes_list List containing dataframes with all nodes.
-        #' @param edges_list List containing dataframes with all edges.
+        #' @param pw_biopax Pathway as a BioPAX object.
         #' @param exclude_ids Component ids to exclude from graph.
+        #' @param verbose Boolean. Show all warnings?
         #' 
         #' @author 
         #' Ivan Grishagin
 
+        #prepare raw lists of nodes and edges
+        nodes_list<-
+            pw_biopax %>% 
+            internal_allnodes_list
+        edges_list<-
+            pw_biopax %>% 
+            internal_alledges_list
+        
         #combine all nodes list items
         allnodes<-
             nodes_list %>% 
@@ -65,16 +72,16 @@ make_allnodes_alledges<-
         #also, unite multiple vocabulary/dbid nodes, which are referred by the same entity node,
         #into neat lists
         nodes_edges_list<-
-            internal_split_mult_node_refs(list(allnodes
+            RIGplotbiopax:::internal_split_mult_node_refs(list(allnodes
                                                ,alledges)
                                           ,ntype=unique(nodes_list$vocab_df$type)
                                           ,verbose=verbose) %>% 
-            internal_split_mult_node_refs(ntype="dbid"
+            RIGplotbiopax:::internal_split_mult_node_refs(ntype="dbid"
                                           ,verbose=verbose) %>% 
-            internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)
+            RIGplotbiopax:::internal_merge_mult_node_refs(ntype=unique(nodes_list$vocab_df$type)
                                           ,verbose=verbose
                                           ,sep="\n") %>% 
-            internal_merge_mult_node_refs(ntype="dbid"
+            RIGplotbiopax:::internal_merge_mult_node_refs(ntype="dbid"
                                           ,verbose=verbose
                                           ,sep="|") 
         
@@ -117,9 +124,9 @@ make_allnodes_alledges<-
         ################ add formatting to nodes and edges
         #node and edge properties
         node_props<-
-            internal_props_node()
+            RIGplotbiopax:::internal_props_node()
         edge_props<-
-            internal_props_edge()
+            RIGplotbiopax:::internal_props_edge()
         
         #format nodes
         allnodes<-

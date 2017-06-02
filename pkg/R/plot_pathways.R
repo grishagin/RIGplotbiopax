@@ -18,7 +18,7 @@ plot_pathways<-
         
         ####################################################################################################
         ######################## prepare biopax
-        #fix all biopax inconsistencies etc.
+        #strip hashes from the biopax property attr value column
         biopax$dt$property_attr_value<-
             biopax$dt$property_attr_value %>% 
             striphash
@@ -30,100 +30,94 @@ plot_pathways<-
                     ,pw_to_plot
                     ,"...")
             #extract biopax instances just for a given pathway
+            #and if there are any sub-pathways from inxight universe,
+            #exclude references to all of their components to simplify things
             pw_biopax<-
                 extract_pathways_from_biopax(biopax = biopax
-                                             ,pw_ids = pw_to_plot)
+                                             ,pw_ids = pw_to_plot
+                                             ,exclude_subpw_comp_patt="inxight_pathways")
+                
             if(is.null(pw_biopax)){
                 next
+            }else if(nrow(pw_biopax$dt)>10000){
+                #split the pathway up roughly in chuncks of 10000 instances
+                #will end up having more 
+                #as some instances will be duplicated in each chunck
+                Nchuncks<-
+                    ceiling(nrow(pw_biopax$dt)/10000)
+                    
+                pw_biopax_list<-
+                    pw_biopax %>% 
+                    split_pathway_into_chunks(pw_id=pw_to_plot
+                                              ,Nchunks=Nchuncks)
+            }else{
+                pw_biopax_list<-
+                    list(pw_biopax)
             }
-
-            #get pathway name
-            pw_to_plot_name<-
-                pw_biopax$dt[id==pw_to_plot & 
-                                 grepl("name",tolower(property))][
-                                     order(-nchar(property_value))]$property_value[1]
-
-            nodes<-list()
-            edges<-list()
             
-            ####################################################################################################
-            ######################## physical entities nodes
-            nodes$physent<-
-                suppressWarnings(internal_nodes_physent(pw_biopax))
+            #clean-up to safely reuse the variable
+            rm(pw_biopax)
+            chunck_num<-0
             
-            ####################################################################################################
-            ######################## dbid node and edges df
-            #dbid nodes
-            nodes$dbid_df<-
-                suppressWarnings(internal_nodes_dbid(pw_biopax))
-            #all entities to dbid edges
-            edges$all2dbid_df<-
-                suppressWarnings(internal_edges_dbid(pw_biopax))
-            
-            ####################################################################################################
-            #vocabulary nodes   
-            nodes$vocab_df<-
-                suppressWarnings(internal_nodes_vocab(pw_biopax))
-            
-            #physical entities to vocabulary edges
-            edges$all2vocab_df<-
-                suppressWarnings(internal_edges_vocab(pw_biopax))
-            
-            ####################################################################################################
-            ######################## complex components edge df
-            #complex components edge dfs
-            edges$cplx_df<-
-                suppressWarnings(internal_edges_cplx(pw_biopax))
-            
-            ####################################################################################################
-            ######################## pathway components edge df
-            #complex components edge dfs
-            edges$pw2component_df<-
-                suppressWarnings(internal_edges_pw(pw_biopax))
-            
-            ####################################################################################################
-            ######################## left-right components node df
-            nodes$lr_df<-
-                suppressWarnings(internal_nodes_lr(pw_biopax))
-            
-            #left-right components edge dfs
-            edges$lr_df<-
-                suppressWarnings(internal_edges_lr(pw_biopax))
-            
-            ####################################################################################################
-            ######################## control edges df
-            #control components edge dfs
-            edges$ctrl_df<-
-                suppressWarnings(internal_edges_ctrl(pw_biopax))
-            ####################################################################################################
-            ######################## prepare all nodes and edges do the plotting
-            if(verbose){
-                allnodes_alledges<-
-                    make_allnodes_alledges(nodes_list=nodes
-                                           ,edges_list=edges
-                                           ,exclude_ids=pw_to_plot
-                                           ,verbose=verbose)
-
-                try(make_plot_graph(allnodes=allnodes_alledges$allnodes
-                                    ,alledges=allnodes_alledges$alledges
-                                    ,pw_name=pw_to_plot_name
-                                    ,tag=paste0(pw_to_plot
-                                                ,tag)))
-            } else {
-                suppressWarnings(
+            for(pw_biopax in pw_biopax_list){
+                #get pathway name
+                pw_name<-
+                    pw_biopax$dt[id==pw_to_plot & 
+                                     grepl("name",tolower(property))][
+                                         order(-nchar(property_value))]$property_value[1]
+                if(length(pw_biopax_list)>1){
+                    #count which part is being processed
+                    chunck_num<-
+                        chunck_num+1
+                    #make up the part name
+                    chunck_tag<-
+                        paste0("PART"
+                               ,chunck_num
+                               ,"of"
+                               ,length(pw_biopax_list))
+                    
+                    #modify the pathway name (if more than one part present)
+                    #and inform the user
+                    pw_name<-
+                        paste(chunck_tag)
+                    
+                    message("\tProcessing "
+                            ,chunck_tag
+                            ,"...")
+                    }
+                ####################################################################################################
+                ######################## prepare all nodes and edges do the plotting
+                if(verbose){
                     allnodes_alledges<-
-                        make_allnodes_alledges(nodes_list=nodes
-                                               ,edges_list=edges
+                        make_allnodes_alledges(pw_biopax
                                                ,exclude_ids=pw_to_plot
-                                               ,verbose=verbose))
-                
-                suppressWarnings(
-                    try(make_plot_graph(allnodes=allnodes_alledges$allnodes
-                                        ,alledges=allnodes_alledges$alledges
-                                        ,pw_name=pw_to_plot_name
-                                        ,tag=paste0(pw_to_plot
-                                                    ,tag))))
+                                               ,verbose=verbose)
+                    
+                        try(make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                            ,alledges=allnodes_alledges$alledges
+                                            ,pw_name=pw_name
+                                            ,tag=paste0(pw_to_plot
+                                                        ,tag
+                                                        ,chunck_tag
+                                                        ,sep="_")))
+                } else {
+                    suppressWarnings(
+                        allnodes_alledges<-
+                            make_allnodes_alledges(pw_biopax
+                                                   ,exclude_ids=pw_to_plot
+                                                   ,verbose=verbose))
+                    
+                    suppressWarnings(
+                        try(make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                            ,alledges=allnodes_alledges$alledges
+                                            ,pw_name=pw_name
+                                            ,tag=paste(pw_to_plot
+                                                       ,tag
+                                                       ,chunck_tag
+                                                       ,sep="_"))))
+                }
             }
+           
         }
        
         return(NULL)

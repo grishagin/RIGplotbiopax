@@ -28,4 +28,10 @@ for f in ${fun_names[@]}
 done
 
 # append a closing bracket
-printf '\t\t)' >> '../NAMESPACE'
+printf '\t\t)\n' >> '../NAMESPACE'
+
+#append import lines
+printf 'import(data.table)
+import(DiagrammeR)
+import(DiagrammeRsvg)
+import(htmlwidgets)' >> '../NAMESPACE'
