@@ -58,6 +58,7 @@ plot_pathways<-
             #clean-up to safely reuse the variable
             rm(pw_biopax)
             chunck_num<-0
+            chunck_tag<-NULL
             
             for(pw_biopax in pw_biopax_list){
                 #get pathway name
@@ -79,6 +80,7 @@ plot_pathways<-
                     #modify the pathway name (if more than one part present)
                     #and inform the user
                     pw_name<-
+                        pw_name %>% 
                         paste(chunck_tag)
                     
                     message("\tProcessing "
