@@ -2,7 +2,8 @@ plot_pathways<-
     function(biopax
              ,pw_ids
              ,tag=NULL
-             ,verbose=FALSE){
+             ,verbose=FALSE
+             ,max_pw_size=10000){
         
         #' @title 
         #' Plot Pathways
@@ -12,6 +13,8 @@ plot_pathways<-
         #' @param pw_ids IDs of pathways to plot.
         #' @param tag Additional tag for the file name (optional).
         #' @param verbose Boolean. Show all warnings?
+        #' @param max_pw_size Maximum allowed size of BioPAX data table. Defaults to 10,000. 
+        #' If exceeded, pathway is split into several parts.
         #' 
         #' @author 
         #' Ivan Grishagin
@@ -39,12 +42,12 @@ plot_pathways<-
                 
             if(is.null(pw_biopax)){
                 next
-            }else if(nrow(pw_biopax$dt)>7000){
+            }else if(nrow(pw_biopax$dt)>max_pw_size){
                 #split the pathway up roughly in chuncks of 10000 instances
                 #will end up having more 
                 #as some instances will be duplicated in each chunck
                 Nchunks<-
-                    ceiling(nrow(pw_biopax$dt)/7000)
+                    ceiling(nrow(pw_biopax$dt)/max_pw_size)
                     
                 pw_biopax_list<-
                     pw_biopax %>% 

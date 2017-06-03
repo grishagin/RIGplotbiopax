@@ -4,7 +4,8 @@
 \alias{plot_pathways}
 \title{Plot Pathways}
 \usage{
-plot_pathways(biopax, pw_ids, tag = NULL, verbose = FALSE)
+plot_pathways(biopax, pw_ids, tag = NULL, verbose = FALSE,
+  max_pw_size = 10000)
 }
 \arguments{
 \item{biopax}{A BioPAX object.}
@@ -14,6 +15,9 @@ plot_pathways(biopax, pw_ids, tag = NULL, verbose = FALSE)
 \item{tag}{Additional tag for the file name (optional).}
 
 \item{verbose}{Boolean. Show all warnings?}
+
+\item{max_pw_size}{Maximum allowed size of BioPAX data table. Defaults to 10,000. 
+If exceeded, pathway is split into several parts.}
 }
 \description{
 Takes in a BioPAX object and pathway ids, and prepares plots in an SVG format.
