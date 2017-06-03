@@ -39,12 +39,12 @@ plot_pathways<-
                 
             if(is.null(pw_biopax)){
                 next
-            }else if(nrow(pw_biopax$dt)>10000){
+            }else if(nrow(pw_biopax$dt)>7000){
                 #split the pathway up roughly in chuncks of 10000 instances
                 #will end up having more 
                 #as some instances will be duplicated in each chunck
                 Nchunks<-
-                    ceiling(nrow(pw_biopax$dt)/10000)
+                    ceiling(nrow(pw_biopax$dt)/7000)
                     
                 pw_biopax_list<-
                     pw_biopax %>% 
@@ -95,13 +95,13 @@ plot_pathways<-
                                                ,exclude_ids=pw_to_plot
                                                ,verbose=verbose)
                     
-                        try(make_plot_graph(allnodes=allnodes_alledges$allnodes
-                                            ,alledges=allnodes_alledges$alledges
-                                            ,pw_name=pw_name
-                                            ,tag=paste0(pw_to_plot
-                                                        ,tag
-                                                        ,chunck_tag
-                                                        ,sep="_")))
+                    try(make_plot_graph(allnodes=allnodes_alledges$allnodes
+                                        ,alledges=allnodes_alledges$alledges
+                                        ,pw_name=pw_name
+                                        ,tag=paste0(pw_to_plot
+                                                    ,tag
+                                                    ,chunck_tag
+                                                    ,sep="_")))
                 } else {
                     suppressWarnings(
                         allnodes_alledges<-

@@ -20,7 +20,7 @@ make_plot_graph<-
         #replace quotation marks with backticks to avoid error
         allnodes$label<-
             allnodes$label %>% 
-            gsub("'"
+            gsub("'|\""
                  ,"`"
                  ,.)
         
