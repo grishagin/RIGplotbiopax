@@ -24,6 +24,12 @@ make_plot_graph<-
                  ,"`"
                  ,.)
         
+        pw_name<-
+            pw_name %>% 
+            gsub("'|\""
+                 ,"`"
+                 ,.)
+        
         ########################################################
         #discover all nodes that link to dbid nodes
         dbid_ids<-
