@@ -3,11 +3,11 @@ Type: Package
 Title: Plot BioPAX Pathways
 Version: 1.9.1
 Depends:
-    plyr,
-    dplyr,
+	plyr,
+	dplyr,
 	data.table,
-    rBiopaxParser,
-    RIGessentials,
+	rBiopaxParser,
+	RIGessentials,
 	RIGbiopax,
 	DiagrammeR,
 	DiagrammeRsvg,
