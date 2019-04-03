@@ -1,9 +1,0 @@
-export("make_allnodes_alledges"
-		,"make_plot_graph"
-		,"plot_pathways"
-		,"update_RIGplotbiopax"
-		)
-import(data.table)
-import(DiagrammeR)
-import(DiagrammeRsvg)
-import(htmlwidgets)
